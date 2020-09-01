@@ -1,0 +1,10 @@
+@font-face {
+    font-family: 'LondrinaSolid';
+    src: url('/static/LondrinaSolid-Light.ttf');
+}
+body {
+  font-size: 100%;
+  font:inherit;
+  font-family: 'LondrinaSolid';
+  vertical-align: baseline;
+}
