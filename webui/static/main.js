@@ -19,5 +19,9 @@ function check_correct(inwa) {
   this_button.disabled = true;
   this_button.innerHTML = "WRONG";
   // var youshouldnotseethis = setInterval()
+  var all_buttons = document.getElementsByTagName("button");
+  for (var i = 0; i < all_buttons.length; i++) {
+    all_buttons[i].disabled = true;
+  }
   setTimeout(stupid_function,1500);
 }
