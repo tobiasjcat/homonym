@@ -10,8 +10,14 @@ from pprint import pformat, pprint
 import time
 import random
 
+import crypter
+
 base_list = []
 queue = []
+
+@get("/")#honeypot. Stop scanning me
+def get_honey():
+    return static_file("urandom", root="urandom_folder")
 
 @get("/static/<sfile>")
 def get_stat(sfile):
@@ -20,9 +26,11 @@ def get_stat(sfile):
 @get("/wfs/<mfile>")
 def static_audio(mfile):
     if mfile.rsplit('.')[1] == "mp3":
-        return static_file(mfile, root="mp3subset")
+        ciphered_filename = mfile.split('-')[2][:-4]
+        real_filename = crypter.decrypt(ciphered_filename)
+        real_filename = mfile.replace(ciphered_filename, real_filename)
+        return static_file(real_filename, root="mp3subset")
     return ''
-
 
 def enqueue():
     while len(queue) < (int(1.5 *  len(base_list))):
@@ -41,7 +49,8 @@ def get_next_json():
     while not wrong_answers:
         next_set = queue.pop(0)
         chosen_audio = random.choice(next_set).strip()
-        wmcf_url = "/wfs/En-us-{}.mp3".format(chosen_audio)
+        hidden_filename = crypter.encrypt(chosen_audio,deslen=30)
+        wmcf_url = "/wfs/En-us-{}.mp3".format(hidden_filename)
         try:
             afilepath = "mp3subset/En-us-{}.mp3".format(chosen_audio)
             # print(afilepath)
@@ -56,7 +65,7 @@ def get_next_json():
     return template("templates/game_section.html", wmcf_url=wmcf_url, wrong_answers=wrong_answers)
 
 
-@get("/")
+# @get("/")
 @get("/index")
 def mainpage():
     global base_list
