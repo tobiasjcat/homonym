@@ -3,7 +3,7 @@
 #Paul Croft
 #August 28, 2020
 
-from bottle import get, run, static_file, template
+from bottle import get, post, request, run, static_file, template
 import json
 import os
 from pprint import pformat, pprint
@@ -31,6 +31,11 @@ def static_audio(mfile):
         real_filename = mfile.replace(ciphered_filename, real_filename)
         return static_file(real_filename, root="mp3subset")
     return ''
+
+@post("/api/check_answer/")
+def gameshow_host():
+    garbage = request.body.read()
+    return "False"
 
 def enqueue():
     while len(queue) < (int(1.5 *  len(base_list))):
