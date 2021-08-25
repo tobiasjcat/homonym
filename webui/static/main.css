@@ -8,3 +8,6 @@ body {
   font-family: 'LondrinaSolid';
   vertical-align: baseline;
 }
+.asc {
+  align-self: center;
+}
